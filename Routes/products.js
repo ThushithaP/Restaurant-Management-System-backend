@@ -242,31 +242,22 @@ router.get("/pname", (req, res) => {
   });
 });
 
-// --Customer cart---//
-router.get("/biriyani", (req, res) => {
-  sql = "select * from products where categoryID=1  and status='Available'";
-  connective.query(sql, (err, results) => {
-    if (!err) {
-      return res.status(200).json(results);
-    } else {
-      return res.status(404).json(err);
-    }
-  });
-});
+// --Display product card---//
 
-router.get("/bread", (req, res) => {
-  sql = "select * from products where categoryID=6 and status='Available'";
-  connective.query(sql, (err, results) => {
-    if (!err) {
-      return res.status(200).json(results);
-    } else {
-      return res.status(500).json(err);
-    }
-  });
-});
-
-router.get("/softDrinks", (req, res) => {
-  sql = "select * from products where categoryID=7 and status='Available'";
+router.get("/showCategoryWise", (req, res) => {
+  const category = req.query.category;
+  let sql = "";
+  if (category === "biriyani") {
+    sql = "select * from products where categoryID=1  and status='Available'";
+  } else if (category === "bread") {
+    sql = "select * from products where categoryID=6 and status='Available'";
+  } else if (category === "softDrinks") {
+    sql = "select * from products where categoryID=7 and status='Available'";
+  } else if (category === "all") {
+    sql = "select * from products where status='Available'";
+  } else {
+    return res.status(400).json({ message: "Invalid category" });
+  }
   connective.query(sql, (err, results) => {
     if (!err) {
       return res.status(200).json(results);
